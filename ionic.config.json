@@ -1,0 +1,8 @@
+{
+  "name": "Updog",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "19173733"
+}
