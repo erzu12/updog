@@ -23,12 +23,15 @@ export class AppComponent {
 
   constructor(private firebase: FirebaseService) {
     this.loggedIn$ = firebase.isLoggedIn();
-    const service = new ChatGptRequestService();
-    service.generateResponse();
 
   }
 
   async signOut() {
     await this.firebase.signOut();
+  }
+
+  async getResponse() {
+    const service = new ChatGptRequestService();
+    await service.generateResponse().then((response) => {});
   }
 }

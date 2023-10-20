@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as dotenv from 'dotenv';
+import { environment } from '../environments/environment';
 import * as openai_1 from 'openai';
 
 @Injectable({
@@ -13,19 +13,22 @@ export class ChatGptRequestService {
     return text.includes('insult');
   }
 
-  generateResponse(): string {
-    console.log(process.env['GPT_API_KEY']);
+  async generateResponse(): Promise<string> {
+    console.log('Generating response');
+    const key = environment.gptApiKey;
+    console.log(key);
 
-    //const configuration = new openai_1.Configuration({
-      //apiKey: process.env.GPT_API_KEY,
-    //});
-    //const openai = new openai_1.OpenAIApi(configuration);
+    const openai = new openai_1.OpenAI({
+      apiKey: key,
+      dangerouslyAllowBrowser: true,
+    });
 
-    //const prompt = 'test';
-    //const chatCompletion = new openai_1.ChatCompletionRequestMessage({
-      //model: 'gpt-3.5-turbo-instruct',
-      //prompt: prompt,
-    //});
+    let chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: 'Say this is a test' }],
+      model: 'gpt-3.5-turbo',
+    });
+
+    console.error(chatCompletion);
 
 
     return 'You are an idiot';
