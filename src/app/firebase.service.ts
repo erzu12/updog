@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {Router} from "@angular/router";
 import {BehaviorSubject, Observable} from "rxjs";
@@ -20,14 +20,12 @@ export class FirebaseService {
   }
 
   async signIn(email: string, password: string) {
-    const result = await this.auth
-      .signInWithEmailAndPassword(email, password);
+    await this.auth.signInWithEmailAndPassword(email, password);
     await this.router.navigate(['']);
   }
 
   async signUp(email: string, password: string) {
-    const result = await this.auth
-      .createUserWithEmailAndPassword(email, password);
+    await this.auth.createUserWithEmailAndPassword(email, password);
     await this.router.navigate(['']);
   }
 

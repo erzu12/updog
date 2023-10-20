@@ -1,6 +1,6 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay" *ngIf="loggedIn$ | async">
+    <ion-menu contentId="main-content" type="overlay" [disabled]="!(loggedIn$ | async)">
       <ion-content>
         <ion-card>
           <ion-item>
