@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FirebaseService} from "./firebase.service";
 import {Observable} from "rxjs";
+import { ChatGptRequestService } from './chat-gpt-request.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,9 @@ export class AppComponent {
 
   constructor(private firebase: FirebaseService) {
     this.loggedIn$ = firebase.isLoggedIn();
+    const service = new ChatGptRequestService();
+    service.generateResponse();
+
   }
 
   async signOut() {
