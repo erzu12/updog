@@ -4,8 +4,7 @@
     flex-direction: column;
     font-family: "SanFrancisco";
     font-size: 1.25rem;
-    margin: 0 auto 1rem;
-    max-width: 600px;
+    margin: 0;
     padding: 0.5rem 1.5rem;
 }
 
@@ -49,20 +48,16 @@ p.sent::after {
 }
 
 p[class^="from-"] {
-    margin: 0.5rem 0;
     width: fit-content;
 }
 
-p.sent~p.sent {
-    margin: 0.25rem 0 0;
+p {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-p.sent~p.sent:not(:last-child) {
-    margin: 0.25rem 0 0;
-}
-
-p.sent~p.sent:last-child {
-    margin-bottom: 0.5rem;
+#container div:last-child {
+    padding-bottom: 80px !important;
 }
 
 p.received,
@@ -153,15 +148,6 @@ h2 {
     padding-bottom: 1.5rem;
 }
 
-.comment {
-    color: #222;
-    font-size: 1.25rem;
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-    max-width: 100%;
-    padding: 0;
-}
-
 @media screen and (max-width: 800px) {
     body {
         margin: 0 0.5rem;
@@ -190,4 +176,7 @@ h2 {
 ion-textarea {
     padding-left: 100px;
     padding-right: 100px;
+    position: fixed;
+    bottom: 0;
+    background-color: var(--ion-color-step-100);
 }
