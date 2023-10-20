@@ -14,10 +14,14 @@
           </ion-item>
         </ion-card>
         <ion-list id="inbox-list">
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of chats; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
+          <ion-menu-toggle auto-hide="false" *ngFor="let c of chats; let i = index">
+            <ion-item routerDirection="root" [routerLink]="'/chat/' + c.chatId" lines="none" detail="false" routerLinkActive="selected">
+                <ion-avatar slot="start">
+                  <img alt="Profilepicture" src="{{c.img}}" />
+                </ion-avatar>
+                <div class="profile-text">
+                  <ion-label>{{c.displayName}}</ion-label>
+                </div>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

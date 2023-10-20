@@ -6,16 +6,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public chats = [
-    { title: 'Andrin Geiger', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Dario portmann', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Jonas Fink', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Alex Wyss', url: '/folder/archived', icon: 'archive' },
-    { title: 'Donald Trump', url: '/folder/trash', icon: 'trash' },
-    { title: 'Joe Biden', url: '/folder/spam', icon: 'warning' },
+    { displayName: 'Andrin Geiger', chatId: 1, img: "https://www.w3schools.com/howto/img_avatar.png" },
+    { displayName: 'Dario portmann', chatId: 10, img: "https://www.w3schools.com/howto/img_avatar.png" },
+    { displayName: 'Jonas Fink', chatId: 2, img: "https://www.w3schools.com/howto/img_avatar.png" },
+    { displayName: 'Alex Wyss', chatId: 20, img: "https://www.w3schools.com/howto/img_avatar.png" },
+    { displayName: 'Donald Trump', chatId: 3, img: "https://www.w3schools.com/howto/img_avatar.png" },
+    { displayName: 'Joe Biden', chatId: 30, img: "https://www.w3schools.com/howto/img_avatar.png" },
   ]
 
-  public loggedInUser = { displayName: 'Andrin Geiger', email: "homo@gmail.com", img: "https://www.w3schools.com/howto/img_avatar.png"};
-  constructor() {}
+  public loggedInUser = { displayName: 'Andrin Geiger', email: "homo@gmail.com", img: "https://www.w3schools.com/howto/img_avatar.png" };
+  constructor() { }
 
   public logout() {
     console.log("logout");
