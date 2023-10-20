@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "updog-25782"
+  },
+  "targets": {
+    "updog-25782": {
+      "hosting": {
+        "app": [
+          "updog-25782"
+        ]
+      }
+    }
   }
 }
