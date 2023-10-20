@@ -8,14 +8,16 @@ import {Observable} from "rxjs";
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public appPages = [
-    {title: 'Inbox', url: '/folder/inbox', icon: 'mail'},
-    {title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane'},
-    {title: 'Favorites', url: '/folder/favorites', icon: 'heart'},
-    {title: 'Archived', url: '/folder/archived', icon: 'archive'},
-    {title: 'Trash', url: '/folder/trash', icon: 'trash'},
-    {title: 'Spam', url: '/folder/spam', icon: 'warning'},
-  ];
+  public chats = [
+    { title: 'Andrin Geiger', url: '/folder/inbox', icon: 'mail' },
+    { title: 'Dario portmann', url: '/folder/outbox', icon: 'paper-plane' },
+    { title: 'Jonas Fink', url: '/folder/favorites', icon: 'heart' },
+    { title: 'Alex Wyss', url: '/folder/archived', icon: 'archive' },
+    { title: 'Donald Trump', url: '/folder/trash', icon: 'trash' },
+    { title: 'Joe Biden', url: '/folder/spam', icon: 'warning' },
+  ]
+
+  public loggedInUser = { displayName: 'Andrin Geiger', email: "homo@gmail.com", img: "https://www.w3schools.com/howto/img_avatar.png"};
   loggedIn$: Observable<boolean> | undefined;
 
   constructor(private firebase: FirebaseService) {

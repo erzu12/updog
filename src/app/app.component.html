@@ -2,13 +2,20 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay" *ngIf="loggedIn$ | async">
       <ion-content>
+        <ion-card>
+          <ion-item>
+          <ion-avatar slot="start">
+            <img alt="Profilepicture" src="{{loggedInUser.img}}" />
+          </ion-avatar>
+          <div class="profile-text">
+            <ion-label>{{loggedInUser.displayName}}</ion-label>
+            <ion-note>{{loggedInUser.email}}</ion-note>
+          </div>
+          </ion-item>
+        </ion-card>
         <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi@ionicframework.com</ion-note>
-
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
-                      routerLinkActive="selected">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of chats; let i = index">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>

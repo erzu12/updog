@@ -117,3 +117,18 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+.profile-text {
+  display: flex;
+  align-items: start;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  padding-left: 5px;
+}
+
+.profile-text ion-note {
+  margin-bottom: 0px !important;
+  padding: 0px !important;
+}
