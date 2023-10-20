@@ -7,8 +7,6 @@ import {FirebaseService} from "../firebase.service";
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  email: string = "";
-  password: string = "";
   error: string = "";
 
   constructor(private firebase: FirebaseService) {
@@ -17,16 +15,9 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  async signUp() {
+  async signInWithGoogle() {
     this.error = "";
-    await this.firebase.signUp(this.email, this.password).catch(error => {
-      this.error = error.code
-    });
-  }
-
-  async signIn() {
-    this.error = "";
-    await this.firebase.signIn(this.email, this.password).catch(error => {
+    await this.firebase.signInWithGoogle().catch(error => {
       this.error = error.code
     });
   }

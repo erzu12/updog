@@ -1,27 +1,28 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay" [disabled]="!(loggedIn$ | async)">
+    <ion-menu contentId="main-content" type="overlay" [disabled]="user == undefined">
       <ion-content>
         <ion-card>
           <ion-item>
-          <ion-avatar slot="start">
-            <img alt="Profilepicture" src="{{loggedInUser.img}}" />
-          </ion-avatar>
-          <div class="profile-text">
-            <ion-label>{{loggedInUser.displayName}}</ion-label>
-            <ion-note>{{loggedInUser.email}}</ion-note>
-          </div>
+            <ion-avatar slot="start">
+              <img alt="Profilepicture" src="{{user?.photoURL}}"/>
+            </ion-avatar>
+            <div class="profile-text">
+              <ion-label>{{user?.displayName}}</ion-label>
+              <ion-note>{{user?.email}}</ion-note>
+            </div>
           </ion-item>
         </ion-card>
         <ion-list id="inbox-list">
           <ion-menu-toggle auto-hide="false" *ngFor="let c of chats; let i = index">
-            <ion-item routerDirection="root" [routerLink]="'/chat/' + c.chatId" lines="none" detail="false" routerLinkActive="selected">
-                <ion-avatar slot="start">
-                  <img alt="Profilepicture" src="{{c.img}}" />
-                </ion-avatar>
-                <div class="profile-text">
-                  <ion-label>{{c.displayName}}</ion-label>
-                </div>
+            <ion-item routerDirection="root" [routerLink]="'/chat/' + c.chatId" lines="none" detail="false"
+                      routerLinkActive="selected">
+              <ion-avatar slot="start">
+                <img alt="Profilepicture" src="{{c.img}}"/>
+              </ion-avatar>
+              <div class="profile-text">
+                <ion-label>{{c.displayName}}</ion-label>
+              </div>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
