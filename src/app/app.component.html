@@ -3,7 +3,7 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-card>
-          <ion-item>
+          <ion-item (click)="logout()">
           <ion-avatar slot="start">
             <img alt="Profilepicture" src="{{loggedInUser.img}}" />
           </ion-avatar>

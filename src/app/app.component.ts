@@ -16,4 +16,8 @@ export class AppComponent {
 
   public loggedInUser = { displayName: 'Andrin Geiger', email: "homo@gmail.com", img: "https://www.w3schools.com/howto/img_avatar.png"};
   constructor() {}
+
+  public logout() {
+    console.log("logout");
+  }
 }
