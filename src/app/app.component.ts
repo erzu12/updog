@@ -1,5 +1,6 @@
 import {Component, OnDestroy} from '@angular/core';
 import {FirebaseService} from "./firebase.service";
+import { ChatGptRequestService } from './chat-gpt-request.service';
 import {Subscription} from "rxjs";
 import {UserInfo} from "@angular/fire/auth";
 
@@ -27,6 +28,11 @@ export class AppComponent implements OnDestroy{
 
   async signOut() {
     await this.firebase.signOut();
+  }
+
+  async getResponse() {
+    const service = new ChatGptRequestService();
+    await service.generateResponse();
   }
 
   ngOnDestroy(): void {
