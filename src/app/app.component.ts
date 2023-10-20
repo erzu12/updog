@@ -1,14 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FirebaseService} from "./firebase.service";
-import {Observable} from "rxjs";
 import { ChatGptRequestService } from './chat-gpt-request.service';
+import {Subscription} from "rxjs";
+import {UserInfo} from "@angular/fire/auth";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy{
   public chats = [
     { displayName: 'Andrin Geiger', chatId: 1, img: "https://www.w3schools.com/howto/img_avatar.png" },
     { displayName: 'Dario portmann', chatId: 10, img: "https://www.w3schools.com/howto/img_avatar.png" },
@@ -18,12 +19,11 @@ export class AppComponent {
     { displayName: 'Joe Biden', chatId: 30, img: "https://www.w3schools.com/howto/img_avatar.png" },
   ]
 
-  public loggedInUser = { displayName: 'Andrin Geiger', email: "homo@gmail.com", img: "https://www.w3schools.com/howto/img_avatar.png" };
-  loggedIn$: Observable<boolean> | undefined;
+  private subscription: Subscription;
+  user: UserInfo | undefined;
 
   constructor(private firebase: FirebaseService) {
-    this.loggedIn$ = firebase.isLoggedIn();
-
+    this.subscription = firebase.currentUser().subscribe(user => this.user = user);
   }
 
   async signOut() {
@@ -32,6 +32,10 @@ export class AppComponent {
 
   async getResponse() {
     const service = new ChatGptRequestService();
-    await service.generateResponse().then((response) => {});
+    await service.generateResponse();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

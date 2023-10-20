@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ChatPage implements OnInit {
   public chat!: Chat;
   public loggedInUserId = 1;
+  public typingMessage = '';
   private activatedRoute = inject(ActivatedRoute)
   ngOnInit() {
     const chatId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -20,115 +21,115 @@ export class ChatPage implements OnInit {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 2,
           senderId: 2,
           content: 'Hi',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 3,
           senderId: 1,
           content: 'How are you?',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 4,
           senderId: 2,
           content: 'I am fine',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 5,
           senderId: 1,
           content: 'Good to hear that',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 6,
           senderId: 2,
           content: 'See you later',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         },
         {
           id: 1,
           senderId: 1,
           content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          date: new Date()
+          timestamp: new Date()
         }
       ]
     };// load chat from firebase using chatId;
@@ -144,5 +145,5 @@ type Message = {
   id: number;
   senderId: number;
   content: string;
-  date: Date;
+  timestamp: Date;
 }
