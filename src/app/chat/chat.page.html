@@ -16,7 +16,14 @@
 
   <div id="container">
     <div *ngFor="let m of chat.messages; let i = index" class="imessage"> 
-        <p class="{{m.senderId === loggedInUserId ? 'sent' : 'received'}}">{{m.content}}</p>
+        <p class="{{m.senderId === loggedInUserId ? 'sent' : 'received'}}">{{m.content}}
+          <br>
+          <ion-note class="time">{{m.timestamp | date: 'short'}}</ion-note>
+        </p>
+    </div>
+
+    <div>
+      <ion-textarea [(ngModel)]="typingMessage" placeholder="Type your message here..."></ion-textarea>
     </div>
   </div>
 </ion-content>

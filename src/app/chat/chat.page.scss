@@ -26,7 +26,8 @@
     position: absolute;
 }
 
-p.sent {
+p.sent,
+p.sent>ion-note {
     align-self: flex-end;
     background-color: #248bf5;
     color: #fff;
@@ -40,7 +41,7 @@ p.sent::before {
 }
 
 p.sent::after {
-    background-color: black;
+    background-color: var(--ion-color-step-100);
     border-bottom-left-radius: 0.5rem;
     right: -40px;
     transform: translate(-30px, -2px);
@@ -64,10 +65,12 @@ p.sent~p.sent:last-child {
     margin-bottom: 0.5rem;
 }
 
-p.received {
+p.received,
+p.received>ion-note {
     align-items: flex-start;
     background-color: #e5e5ea;
     color: #000;
+    width: fit-content;
 }
 
 p.received:before {
@@ -78,7 +81,7 @@ p.received:before {
 }
 
 p.received::after {
-    background-color: black;
+    background-color: var(--ion-color-step-100);
     border-bottom-right-radius: 0.5rem;
     left: 20px;
     transform: translate(-30px, -2px);
@@ -110,20 +113,6 @@ p[class^="from-"].emoji::before {
     margin-top: 1rem !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* general styling */
 @font-face {
     font-family: "SanFrancisco";
     src:
@@ -192,4 +181,13 @@ h2 {
     .imessage p {
         margin: 0.5rem 0;
     }
+}
+
+#container {
+    background-color: var(--ion-color-step-100);
+}
+
+ion-textarea {
+    padding-left: 100px;
+    padding-right: 100px;
 }
