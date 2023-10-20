@@ -132,3 +132,8 @@ ion-item.selected {
   margin-bottom: 0px !important;
   padding: 0px !important;
 }
+
+ion-menu-toggle {
+  // --border: 1px solid var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+  background-color: red !important;
+}
