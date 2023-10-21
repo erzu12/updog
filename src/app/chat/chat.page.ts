@@ -79,6 +79,9 @@ export class ChatPage implements OnDestroy {
   }
 
   private async type(text: string) {
+    if (this.typingInProgress) {
+      return;
+    }
     this.typingInProgress = true;
     const charArray = text.split('');
     const maxDelay = 30;
