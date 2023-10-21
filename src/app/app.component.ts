@@ -32,9 +32,13 @@ export class AppComponent implements OnDestroy{
 
   async getResponse() {
     const service = new ChatGptRequestService();
-    const messsage = 'headass';
+    const messsage = 'hello';
     if(await service.isInsult(messsage)) {
       const response = await service.generateInsult(messsage);
+      console.log(response);
+    }
+    else {
+      const response = await service.generateAutoResponse([{user: 'user', message: messsage}]);
       console.log(response);
     }
   }
