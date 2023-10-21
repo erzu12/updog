@@ -180,6 +180,11 @@ h2 {
     padding-bottom: 60px;
 }
 
+#background {
+    background-color: var(--ion-color-step-100);
+    height: 100%;
+}
+
 #message-input {
     width: 100%;
     padding-left: 100px;
