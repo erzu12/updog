@@ -6,6 +6,7 @@
     font-size: 1.25rem;
     margin: 0;
     padding: 0.5rem 1.5rem;
+    background-color: var(--ion-color-step-100);
 }
 
 .imessage p {
@@ -16,6 +17,14 @@
     position: relative;
     word-wrap: break-word;
     white-space: pre-wrap;
+}
+
+p.sent {
+    border-bottom-right-radius: 0px !important;
+}
+
+p.received {
+    border-bottom-left-radius: 0px !important;
 }
 
 .imessage p::before,
