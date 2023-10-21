@@ -226,11 +226,14 @@ export class FirebaseService implements OnDestroy {
   }
 
   async sendMessage(chatId: string, content: string) {
-    const senderId = this.userSubject.value?.uid;
-    if (senderId) {
+    const user = this.userSubject.value;
+    if (user) {
+      if (user?.chatReadAmountOfMessages != undefined && chatId in user?.chatReadAmountOfMessages) {
+        user.chatReadAmountOfMessages[chatId] += 1;
+      }
       return await this.chatsCollection.doc(chatId).update({
         messages: arrayUnion({
-          senderId: senderId,
+          senderId: user?.uid,
           content: content,
           timestamp: moment().toISOString()
         }) as unknown as MessageData[]
