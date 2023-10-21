@@ -28,12 +28,18 @@ export class ChatGptRequestService {
     return await this.generateResponse(prompt, 100);
   }
 
-  async generateAutoResponse(chatHistory: ChatMessage[]): Promise<string[]> {
-    let prompt = 'the following is a chat history:\n\n';
+  async generateAutoResponse(chatHistory: ChatMessage[], user: string): Promise<string[]> {
+    let users: string[] = [user];
+    for(const message of chatHistory) {
+      if(!users.includes(message.user)) {
+        users.push(message.user);
+      }
+    }
+    let prompt = 'the following is a chat history between ' + users.length + ' people, i am ' + user + ':\n\n';
     for (const message of chatHistory) {
       prompt += message.user + ': ' + message.message + '\n';
     }
-    prompt += '\ngive 3 suggestions for short and casual a responses I could write\n\n me: \n';
+    prompt += '\ngive 3 suggestions for short and casual a responses' + user + 'could write\n\n ' + user +': \n';
     console.log(prompt);
 
     const response = await this.generateResponse(prompt, 100);
