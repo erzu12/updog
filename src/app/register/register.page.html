@@ -10,7 +10,7 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Login</ion-title>
+      <ion-title size="large">Register</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -19,6 +19,11 @@
     <h1>Welcome to Updog!</h1>
     <p>Sign in to continue</p>
     <ion-list>
+      <ion-item lines="none">
+        <ion-input class="styled-input" labelPlacement="stacked" type="text" fill="outline" [(ngModel)]="name">
+          <div slot="label">Name</div>
+        </ion-input>
+      </ion-item>
       <ion-item lines="none">
         <ion-input class="styled-input" labelPlacement="stacked" type="email" fill="outline" [(ngModel)]="email">
           <div slot="label">Email</div>
@@ -29,25 +34,19 @@
           <div slot="label">Password</div>
         </ion-input>
       </ion-item>
+      <ion-item lines="none">
+        <ion-input class="styled-input" labelPlacement="stacked" type="password" fill="outline" [(ngModel)]="repeatPassword">
+          <div slot="label">Repeat Password</div>
+        </ion-input>
+      </ion-item>
       <ion-item *ngIf="error" lines="none">
         <ion-text color="danger">
           <p>{{error}}</p>
         </ion-text>
       </ion-item>
       <ion-item lines="none">
-        <ion-button [routerLink]="'/register'" fill="outline" color="secondary">Register</ion-button>
-        <ion-button (click)="signIn()" slot="end" color="primary">Login</ion-button>
-      </ion-item>
-    </ion-list>
-    <p>OR</p>
-    <ion-list>
-      <ion-item lines="none">
-        <img (click)="signInWithGoogle()" src="assets/ContinueWithGoogle.svg" alt="Continue with Google">
-      </ion-item>
-      <ion-item *ngIf="googleError" lines="none">
-        <ion-text color="danger">
-          <p>{{googleError}}</p>
-        </ion-text>
+        <ion-button [routerLink]="'/login'" fill="outline" color="secondary">Back to Login</ion-button>
+        <ion-button (click)="signUp()" slot="end" color="primary" [disabled]="!isValid()">Sign Up</ion-button>
       </ion-item>
     </ion-list>
   </ion-card>

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FirebaseService} from "../firebase.service";
-import { ThemeSwitcherService } from '../theme-switcher.service';
+import {ThemeSwitcherService} from '../theme-switcher.service';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +8,10 @@ import { ThemeSwitcherService } from '../theme-switcher.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  email: string = "";
+  password: string = "";
   error: string = "";
+  googleError: string = "";
 
   constructor(private firebase: FirebaseService, public themeSwitcher: ThemeSwitcherService) {
   }
@@ -17,8 +20,15 @@ export class LoginPage implements OnInit {
   }
 
   async signInWithGoogle() {
-    this.error = "";
+    this.googleError = "";
     await this.firebase.signInWithGoogle().catch(error => {
+      this.googleError = error.code
+    });
+  }
+
+  async signIn() {
+    this.error = "";
+    await this.firebase.signIn(this.email, this.password).catch(error => {
       this.error = error.code
     });
   }
