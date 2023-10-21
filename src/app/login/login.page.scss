@@ -1,0 +1,21 @@
+ion-card {
+    width: fit-content;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    margin-top: 50px;
+}
+
+.logo {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 200px !important; //any size
+    max-height: w00px !important; //any size 
+    border-radius: 50%;
+}
+
+ion-card img {
+    cursor: pointer;
+}

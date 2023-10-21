@@ -12,13 +12,15 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item>
-      <ion-button fill="clear" (click)="signInWithGoogle()"><img src="assets/ContinueWithGoogle.svg"
-                                                                 alt="Continue with Google"></ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-text color="danger">{{error}}</ion-text>
-    </ion-item>
-  </ion-list>
+    <ion-card>
+        <img alt="Profilepicture" src="../assets/logo.png" class="logo">
+        <h1>Welcome to Updog!</h1>
+        <p>Sign in to continue</p>
+        <ion-item>
+            <img (click)="signInWithGoogle()" src="assets/ContinueWithGoogle.svg" alt="Continue with Google">
+        </ion-item>
+        <ion-text color="danger">
+          <p>{{error}}</p>
+        </ion-text>
+    </ion-card>
 </ion-content>

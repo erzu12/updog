@@ -25,10 +25,10 @@
         </ion-popover>
         <ion-list id="inbox-list">
           <ion-menu-toggle auto-hide="false" *ngFor="let c of chats; let i = index">
-            <ion-item routerDirection="root" [routerLink]="'/chat/' + c.chatId" lines="full" detail="false"
+            <ion-item routerDirection="root" [routerLink]="'/chat/' + c.uid" lines="full" detail="false"
                       routerLinkActive="selected">
               <ion-avatar slot="start">
-                <img alt="Profilepicture" src="{{c.img}}"/>
+                <img alt="Profilepicture" src="{{c.image}}"/>
               </ion-avatar>
               <div class="profile-text">
                 <ion-label>{{c.displayName}}</ion-label>
@@ -36,7 +36,7 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
-
+          <p>Copyright Updog 2023</p>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
