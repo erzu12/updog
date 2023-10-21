@@ -1,9 +1,9 @@
-import {Component, inject, OnDestroy, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {ChatGptRequestService} from '../chat-gpt-request.service';
-import {Chat, FirebaseService, Message, User} from '../firebase.service';
-import {BehaviorSubject, Subscription} from 'rxjs';
-import {IonContent} from "@ionic/angular";
+import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ChatGptRequestService } from '../chat-gpt-request.service';
+import { Chat, FirebaseService, Message, User } from '../firebase.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { IonContent } from "@ionic/angular";
 
 type ChatDisplay = Chat & {
   messages: MessageWithInsult[];
@@ -60,13 +60,17 @@ export class ChatPage implements OnDestroy {
     if (!message.isInsult) {
       return;
     }
+
     this.creatingResponse = true;
     const response = await this.ai.generateInsult(message.content);
+    document.getElementById('typewriter-area')!.classList.add('generating');
     this.creatingResponse = false;
     this.typingMessage = response;
   }
 
   async sendMessage() {
+    document.getElementById('typewriter-area')?.classList.remove('generating');
+
     await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage.trim());
     this.typingMessage = "";
   }

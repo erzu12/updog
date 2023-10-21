@@ -16,7 +16,7 @@
         </ion-card>
         <ion-popover trigger="account-button" trigger-action="click">
           <ng-template id="account-popover">
-            <ion-item>
+            <ion-item lines="none">
               <ion-toggle [checked]="themeSwitcher.toggle" (ionChange)="themeSwitcher.toggleChange($event)">Dark Mode
               </ion-toggle>
             </ion-item>
@@ -32,7 +32,7 @@
           </ion-item>
           <ion-popover trigger="add-chat-button" trigger-action="click">
             <ng-template id="create-chat-popover">
-              <ion-list>
+              <ion-list lines="none">
                 <ion-item>
                   <ion-select aria-label="participants" placeholder="Select all participants" multiple="true"
                               [(ngModel)]="participants">

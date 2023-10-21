@@ -213,4 +213,44 @@ p.insult:before {
 ion-skeleton-text {
     height: 60%;
     margin: auto;
+    margin-top: 10px;
+}
+
+#typewriter-area {
+    width: 100%;
+}
+
+.generating>ion-textarea {
+    overflow: hidden;
+    white-space: nowrap;
+    /* Keeps the content on a single line */
+    max-height: 100px;
+    /* Gives that scrolling effect as the typing happens */
+    animation:
+        typing 3.5s steps(40, end),
+        blink-caret .75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-color: transparent
+    }
+
+    50% {
+        border-color: orange;
+    }
 }
