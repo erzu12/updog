@@ -46,9 +46,10 @@ export class ChatPage implements OnDestroy {
   }
 
   async scanMessage(newChat: ChatDisplay): Promise<ChatDisplay> {
-    const numberOfOldMessages = this.chat.value?.messages.length ?? 0;
+    const numberOfNewMessages = newChat.messages.length - this.chat.value!.messages.length;
+    const indexOfNewMessages = newChat.messages.length - numberOfNewMessages;
     for (let i = 0; i < newChat.messages.length; i++) {
-      if (i + 1 < numberOfOldMessages) {
+      if (i < indexOfNewMessages) {
         continue
       }
       const message = newChat.messages[i];
@@ -70,8 +71,9 @@ export class ChatPage implements OnDestroy {
   }
 
   async sendMessage() {
-    await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage.trim());
+    const message = this.typingMessage.trim();
     this.typingMessage = "";
+    await this.firebase.sendMessage(this.chat.value!.uid, message);
   }
 
   ngOnDestroy() {

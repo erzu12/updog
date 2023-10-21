@@ -155,8 +155,8 @@ h2 {
 }
 
 #container {
-  background-color: var(--ion-color-step-100);
-  padding-bottom: 80px;
+    background-color: var(--ion-color-step-100);
+    padding-bottom: 80px;
 }
 
 @media screen and (max-width: 800px) {
@@ -180,7 +180,7 @@ h2 {
     }
 
     #container {
-      padding-bottom: 60px;
+        padding-bottom: 60px;
     }
 }
 
@@ -244,5 +244,12 @@ ion-skeleton-text {
 
     50% {
         border-color: orange;
+    }
+}
+
+
+@media screen and (max-width: 990px) {
+    #message-input {
+        padding-left: 20px;
     }
 }
