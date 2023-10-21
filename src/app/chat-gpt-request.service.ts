@@ -39,7 +39,8 @@ export class ChatGptRequestService {
     const response = await this.generateResponse(prompt, 100);
     const responses = response.split('\n');
     for (let i = 0; i < responses.length; i++) {
-      responses[i] = responses[i].substring(3);
+      const stringWithoutDisplayName = responses[i].substring(3).replace(`${user}: `, ``);
+      responses[i] = stringWithoutDisplayName;
     }
     return responses;
   }
