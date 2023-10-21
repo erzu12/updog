@@ -136,6 +136,61 @@ export class FirebaseService implements OnDestroy {
           senderId: '2',
           timestamp: new Date()
         },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'daddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddaddad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
       ]
     } as Chat | undefined);
   }

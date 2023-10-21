@@ -22,8 +22,11 @@
         </p>
     </div>
 
-    <div>
-      <ion-textarea [(ngModel)]="typingMessage" placeholder="Type your message here..."></ion-textarea>
+    <div id="message-input">
+      <ion-textarea [(ngModel)]="typingMessage" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
+      <ion-button color="light" shape="round" (click)="sendMessage" [disabled]="typingMessage === ''">
+        <ion-icon name="send-outline" slot="end" ></ion-icon>
+      </ion-button>  
     </div>
   </div>
 </ion-content>
