@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FirebaseService} from "../firebase.service";
 import {ThemeSwitcherService} from "../theme-switcher.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -14,10 +15,11 @@ export class RegisterPage implements OnInit {
   repeatPassword: string = "";
   error: string = "";
 
-  constructor(private firebase: FirebaseService, public themeSwitcher: ThemeSwitcherService) {
+  constructor(private firebase: FirebaseService, public themeSwitcher: ThemeSwitcherService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.email = this.activatedRoute.snapshot.paramMap.get('mail') ?? "";
   }
 
   async signUp() {
