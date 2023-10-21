@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Chat with {{chat.participant}}</ion-title>
+    <ion-title>Chat with {{participantsDisplayname.join(", ")}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -15,10 +15,10 @@
   </ion-header>
 
   <div id="container">
-    <div *ngFor="let m of chat.messages; let i = index" class="imessage"> 
-        <p class="{{m.senderId === loggedInUserId ? 'sent' : 'received'}}">{{m.content}}
+    <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage"> 
+        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : 'received'}}">{{m.content}}
           <br>
-          <ion-note class="time">{{m.timestamp | date: 'short'}}</ion-note>
+          <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
         </p>
     </div>
 

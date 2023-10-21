@@ -1,15 +1,28 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {GoogleAuthProvider} from "@angular/fire/auth";
-import {Router} from "@angular/router";
-import {BehaviorSubject, Subscription} from "rxjs";
-import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
+import { Injectable, OnDestroy } from '@angular/core';
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { GoogleAuthProvider } from "@angular/fire/auth";
+import { Router } from "@angular/router";
+import { BehaviorSubject, Subscription, of } from "rxjs";
+import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
 
 export interface User {
   uid: string;
   displayName: string | null;
   email: string | null;
   photoURL: string | null;
+}
+
+
+export type Chat = {
+  id: string;
+  users: User[];
+  messages: Message[];
+}
+
+export type Message = {
+  senderId: string;
+  content: string;
+  timestamp: Date;
 }
 
 @Injectable({
@@ -77,5 +90,53 @@ export class FirebaseService implements OnDestroy {
 
   otherUsers(): BehaviorSubject<User[] | undefined> {
     return this.otherUsersSubject;
+  }
+
+  async sendMessage(chatId: string, content: string) {
+    //firestore.collection('messages').add(message).catch(console.error);
+  }
+
+  getChat(chatId: string): BehaviorSubject<Chat | undefined> {
+    return new BehaviorSubject({
+      id: chatId,
+      users: [this.currentUser().value!, this.currentUser().value!],
+      messages: [
+        {
+          content: 'Hello',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'd',
+          senderId: '2',
+          timestamp: new Date()
+        },
+        {
+          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
+          senderId: '2',
+          timestamp: new Date()
+        },
+        {
+          content: 'a',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'd',
+          senderId: '2',
+          timestamp: new Date()
+        },
+        {
+          content: 'dad',
+          senderId: this.userSubject.value!.uid,
+          timestamp: new Date()
+        },
+        {
+          content: 'asd',
+          senderId: '2',
+          timestamp: new Date()
+        },
+      ]
+    } as Chat | undefined);
   }
 }

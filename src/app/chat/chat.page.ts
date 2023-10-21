@@ -1,149 +1,30 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ChatGptRequestService } from '../chat-gpt-request.service';
+import { Chat, FirebaseService, User } from '../firebase.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
-  public chat!: Chat;
-  public loggedInUserId = 1;
+export class ChatPage {
+  public chat: BehaviorSubject<Chat | undefined> = new BehaviorSubject<Chat | undefined>(undefined);
   public typingMessage = '';
   private activatedRoute = inject(ActivatedRoute)
-  ngOnInit() {
-    const chatId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.chat = {
-      id: 1,
-      participant: 'John Doe',
-      messages: [
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 2,
-          senderId: 2,
-          content: 'Hi',
-          timestamp: new Date()
-        },
-        {
-          id: 3,
-          senderId: 1,
-          content: 'How are you?',
-          timestamp: new Date()
-        },
-        {
-          id: 4,
-          senderId: 2,
-          content: 'I am fine',
-          timestamp: new Date()
-        },
-        {
-          id: 5,
-          senderId: 1,
-          content: 'Good to hear that',
-          timestamp: new Date()
-        },
-        {
-          id: 6,
-          senderId: 2,
-          content: 'See you later',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        },
-        {
-          id: 1,
-          senderId: 1,
-          content: 'HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello',
-          timestamp: new Date()
-        }
-      ]
-    };// load chat from firebase using chatId;
+  public currentUser: BehaviorSubject<User | undefined>;
+  public participantsDisplayname: string[] = [];
+
+  constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
+    this.currentUser = firebase.currentUser();
+    this.chat = firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!);
+    this.chat.subscribe(chat => {
+      chat?.users.filter(user => user.uid != this.currentUser.value?.uid).map(user => this.participantsDisplayname.push(user.displayName!));
+    });
   }
 
-}
-type Chat = {
-  id: number;
-  participant: string;
-  messages: Message[];
-}
-type Message = {
-  id: number;
-  senderId: number;
-  content: string;
-  timestamp: Date;
+  async sendMessage() {
+    await this.firebase.sendMessage(this.chat.value!.id, this.typingMessage);
+  }
 }
