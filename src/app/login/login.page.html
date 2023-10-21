@@ -35,7 +35,7 @@
         </ion-text>
       </ion-item>
       <ion-item lines="none">
-        <ion-button [routerLink]="'/register'" fill="outline" color="secondary">Register</ion-button>
+        <ion-nav-link [routerLink]="'/register/' + email">Register</ion-nav-link>
         <ion-button (click)="signIn()" slot="end" color="primary">Login</ion-button>
       </ion-item>
     </ion-list>

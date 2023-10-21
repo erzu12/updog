@@ -29,3 +29,11 @@ ion-input.styled-input {
   --padding-start: 7px !important;
   --padding-end: 7px !important;
 }
+
+ion-nav-link {
+  color: var(--ion-color-secondary);
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
