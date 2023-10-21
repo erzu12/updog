@@ -21,9 +21,12 @@ export class ChatPage implements OnDestroy {
   public typingMessage = '';
   public creatingResponse = false;
   public typingInProgress = false;
+  public loadingNormalResponse = false;
   private activatedRoute = inject(ActivatedRoute)
   public currentUser: BehaviorSubject<User | undefined>;
   public participantsDisplayname: string[] = [];
+  public isActionSheetOpen = false;
+  public actionSheetButtons: any = [];
   @ViewChild('content')
   container: IonContent | undefined;
   private subscriptions: Subscription[] = [];
@@ -59,10 +62,41 @@ export class ChatPage implements OnDestroy {
   }
 
   async createResponse(message: MessageWithInsult, element: any) {
-    if (!message.isInsult) {
-      return;
+    if (message.isInsult) {
+      this.createComback(message, element);
+    } else {
+      this.createNormalResponse();
     }
+  }
 
+  async createNormalResponse() {
+    this.loadingNormalResponse = true;
+    const last10Messages = this.chat.value!.messages.slice(-10);
+    const response = await this.ai.generateAutoResponse(last10Messages, this.currentUser.value!.displayName)
+    this.loadingNormalResponse = false;
+    this.isActionSheetOpen = true;
+    this.actionSheetButtons = response.map((response, index) => ({
+      text: response,
+      role: 'destructive',
+      handler: async () => {
+        this.isActionSheetOpen = false;
+        await this.type(this.removeQuotes(response))
+      },
+    }));
+  }
+
+  removeQuotes(inputString: string): string {
+    // Check if the string has at least two characters and starts and ends with double quotes
+    if (inputString.length >= 2 && inputString.charAt(0) === '"' && inputString.charAt(inputString.length - 1) === '"') {
+      // Use substring to remove the first and last characters
+      return inputString.substring(1, inputString.length - 1);
+    } else {
+      // Return the original string if it doesn't meet the criteria
+      return inputString;
+    }
+  }
+
+  async createComback(message: MessageWithInsult, element: any) {
     this.creatingResponse = true;
     element.target.classList.remove('insult');
     const response = await this.ai.generateInsult(message.content);
