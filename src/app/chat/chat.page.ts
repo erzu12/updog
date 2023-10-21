@@ -21,6 +21,7 @@ type MessageWithInsult = Message & { isInsult: boolean };
 export class ChatPage {
   public chat: BehaviorSubject<ChatDisplay | undefined> = new BehaviorSubject<ChatDisplay | undefined>(undefined);
   public typingMessage = '';
+  public creatingResponse = false;
   private activatedRoute = inject(ActivatedRoute)
   public currentUser: BehaviorSubject<User | undefined>;
   public participantsDisplayname: string[] = [];
@@ -33,7 +34,6 @@ export class ChatPage {
       let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: false })) };
       if (this.chat?.value?.messages) {
         newChat = await this.scanMessage(newChat);
-        console.error(newChat);
       }
       this.chat.next(newChat);
       setTimeout(() => {
@@ -61,7 +61,9 @@ export class ChatPage {
     if (!message.isInsult) {
       return;
     }
+    this.creatingResponse = true;
     const response = await this.ai.generateInsult(message.content);
+    this.creatingResponse = false;
     this.typingMessage = response;
   }
 

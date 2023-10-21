@@ -16,7 +16,7 @@
   <div id="background">
     <div id="container">
       <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage">
-        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : m.isInsult ? 'received insult' : 'received'}}"  (click)="createResponse(m)">
+        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : m.isInsult ? 'received insult' : 'received'}}"  (click)="createResponse(m)">{{m.content}}
           <br>
           <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
         </p>
@@ -24,8 +24,8 @@
     </div>
   </div>
   <div id="message-input">
-    <ion-textarea [(ngModel)]="typingMessage" (keydown.control.enter)="sendMessage()"
-      placeholder="Type your message here..." auto-grow="true"></ion-textarea>
+    <ion-textarea *ngIf="!creatingResponse" [(ngModel)]="typingMessage" (keydown.control.enter)="sendMessage()" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
+    <ion-skeleton-text *ngIf="creatingResponse"  [animated]="true"></ion-skeleton-text>
     <ion-button color="light" shape="round" (click)="sendMessage()" [disabled]="typingMessage === ''">
       <ion-icon name="send-outline" slot="end"></ion-icon>
     </ion-button>

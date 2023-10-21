@@ -198,6 +198,18 @@ h2 {
 
 }
 
-.isInsult {
+p.insult,
+p.insult>ion-note {
+    color: white;
+    cursor: pointer;
     background-color: var(--ion-color-danger) !important;
+}
+
+p.insult:before {
+    border-left: 1rem solid var(--ion-color-danger) !important;
+}
+
+ion-skeleton-text {
+    height: 60%;
+    margin: auto;
 }
