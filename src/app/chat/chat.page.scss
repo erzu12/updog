@@ -7,6 +7,8 @@
     margin: 0;
     padding: 0.5rem 1.5rem;
     background-color: var(--ion-color-step-100);
+    -webkit-user-select: text;
+    -moz-user-select: text;
 }
 
 .imessage p {
@@ -265,4 +267,11 @@ ion-note {
     color: #000;
     font-size: 0.75rem;
     font-weight: bold;
+}
+
+
+.spinner {
+    position: fixed;
+    left: 50%;
+    bottom: 100px;
 }

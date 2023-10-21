@@ -28,6 +28,8 @@
       </div>
     </div>
   </div>
+  <ion-spinner *ngIf="loadingNormalResponse" name="crescent" class="spinner"></ion-spinner>
+  <ion-action-sheet trigger="open-action-sheet" [isOpen]="isActionSheetOpen" header="Choose a message" [buttons]="actionSheetButtons"></ion-action-sheet>  
   <div id="message-input">
     <ion-textarea *ngIf="!creatingResponse" [(ngModel)]="typingMessage" (keydown.control.enter)="sendMessage()" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
     <ion-skeleton-text *ngIf="creatingResponse"  [animated]="true"></ion-skeleton-text>
