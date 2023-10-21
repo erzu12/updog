@@ -31,7 +31,11 @@ export class AppComponent implements OnDestroy{
 
   async getResponse() {
     const service = new ChatGptRequestService();
-    await service.generateResponse();
+    const messsage = 'headass';
+    if(await service.isInsult(messsage)) {
+      const response = await service.generateInsult(messsage);
+      console.log(response);
+    }
   }
 
   ngOnDestroy(): void {

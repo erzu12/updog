@@ -9,11 +9,21 @@ export class ChatGptRequestService {
 
   constructor() { }
 
-  isInsult(text: string): boolean {
-    return text.includes('insult');
+  async isInsult(text: string): Promise<boolean> {
+    const prompt = 'the following is a text message. is it insulting?\n\n' + text + '\n\nawnser only as either true or false';
+    const resp = await this.generateResponse(prompt, 1);
+    console.log(resp.toLowerCase());
+    const isInsult = resp.toLowerCase() == 'true';
+
+    return isInsult;
   }
 
-  async generateResponse(): Promise<string> {
+  async generateInsult(text: string): Promise<string> {
+    const prompt = 'the following is an insult, give a clever response\n\n' + text;
+    return await this.generateResponse(prompt, 100);
+  }
+
+  async generateResponse(text: string, max_tokens: number): Promise<string> {
     console.log('Generating response');
     const key = environment.gptApiKey;
     console.log(key);
@@ -23,14 +33,15 @@ export class ChatGptRequestService {
       dangerouslyAllowBrowser: true,
     });
 
-    let chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: 'user', content: 'Say this is a test' }],
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: text }],
       model: 'gpt-3.5-turbo',
-    });
+      max_tokens: max_tokens,
+    }).then((response) => response); //cursed code pls dont look
 
-    console.error(chatCompletion);
 
+    const message = chatCompletion.choices[0]!.message.content!;
 
-    return 'You are an idiot';
+    return message;
   }
 }

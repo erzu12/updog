@@ -28,8 +28,10 @@
         </ion-list>
 
         <ion-list id="labels-list">
-          <ion-list-header>Actions</ion-list-header>
-
+        <ion-list-header>Actions</ion-list-header>
+          <ion-item>
+            <ion-button (click)="getResponse()">GPT</ion-button>
+          </ion-item>
           <ion-item>
             <ion-button (click)="signOut()">Logout</ion-button>
           </ion-item>
