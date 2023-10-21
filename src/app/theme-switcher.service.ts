@@ -3,19 +3,17 @@ import { Injectable, OnInit } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeSwitcherService implements OnInit{
+export class ThemeSwitcherService {
 
-  constructor() { }
-
-  toggle = false;
-
-  ngOnInit() {
+  constructor() { 
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
     this.initializeDarkTheme(prefersDark.matches);
 
     prefersDark.addEventListener('change', (mediaQuery) => this.initializeDarkTheme(mediaQuery.matches));
   }
+
+  toggle = false;
 
   initializeDarkTheme(isDark: boolean) {
     this.toggle = isDark;

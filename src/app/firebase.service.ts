@@ -1,10 +1,10 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {GoogleAuthProvider, UserInfo} from "@angular/fire/auth";
-import {Router} from "@angular/router";
-import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
-import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
-import {arrayUnion} from "@angular/fire/firestore";
+import { Injectable, OnDestroy } from '@angular/core';
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { GoogleAuthProvider, UserInfo } from "@angular/fire/auth";
+import { Router } from "@angular/router";
+import { BehaviorSubject, map, Observable, Subscription } from "rxjs";
+import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
+import { arrayUnion } from "@angular/fire/firestore";
 import * as moment from 'moment';
 
 export interface User {
@@ -81,9 +81,8 @@ export class FirebaseService implements OnDestroy {
       let isResolved = false;
       this.allUsersSubscription = this.usersCollection.valueChanges().subscribe(users => {
         this.allUsersSubject.next(users.reduce((accumulator, user) => {
-            return accumulator.set(user.uid, user);
-          }, new Map())
-        );
+          return accumulator.set(user.uid, user);
+        }, new Map()));
         this.emitOtherUsers();
         if (!isResolved) {
           isResolved = true;
@@ -111,7 +110,7 @@ export class FirebaseService implements OnDestroy {
       this.chatsSubject.next(snapshot.docs.map(doc => {
         const chat = doc.data();
         const otherUsers = chat.userIds.filter(userId => userId !== userData.uid);
-        let image = "assets/group_avatar.png";
+        let image = "assets/logo-transparent.png";
         if (otherUsers.length === 1) {
           image = this.allUsersSubject.value.get(otherUsers[0])?.photoURL ?? image;
         }

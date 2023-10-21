@@ -11,7 +11,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "ionic": "ionic serve",
-    "deploy": "ng build && firebase deploy"
+    "deploy": "firebase deploy"
   },
   "private": true,
   "dependencies": {
