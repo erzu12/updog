@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" #content>
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">adsasd</ion-title>
@@ -15,18 +15,19 @@
   </ion-header>
 
   <div id="container">
-    <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage"> 
-        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : 'received'}}">{{m.content}}
-          <br>
-          <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
-        </p>
+    <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage">
+      <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : 'received'}}">{{m.content}}
+        <br>
+        <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
+      </p>
     </div>
 
     <div id="message-input">
-      <ion-textarea [(ngModel)]="typingMessage" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
-      <ion-button color="light" shape="round" (click)="sendMessage" [disabled]="typingMessage === ''">
-        <ion-icon name="send-outline" slot="end" ></ion-icon>
-      </ion-button>  
+      <ion-textarea [(ngModel)]="typingMessage" (keydown.control.enter)="sendMessage()"
+                    placeholder="Type your message here..." auto-grow="true"></ion-textarea>
+      <ion-button color="light" shape="round" (click)="sendMessage()" [disabled]="typingMessage === ''">
+        <ion-icon name="send-outline" slot="end"></ion-icon>
+      </ion-button>
     </div>
   </div>
 </ion-content>
