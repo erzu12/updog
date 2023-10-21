@@ -1,4 +1,4 @@
-# [Updog](up-dog.social)
+# [Updog](https://up-dog.social)
 
 Updog is a messanger application with integrated AI functionality to detect bullying and to provide a clever answer to it. <br>
 This project was created during the [HackStair 2023](https://hack.stair.ch/) hackathon by : <br>
