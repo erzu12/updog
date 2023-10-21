@@ -31,9 +31,9 @@ export class ChatPage {
   constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
     this.currentUser = firebase.currentUser();
     firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(async chat => {
-      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: false })) };
+      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: true })) };
       if (this.chat?.value?.messages) {
-        newChat = await this.scanMessage(newChat);
+        // newChat = await this.scanMessage(newChat);
       }
       this.chat.next(newChat);
       setTimeout(() => {
@@ -61,13 +61,17 @@ export class ChatPage {
     if (!message.isInsult) {
       return;
     }
+
     this.creatingResponse = true;
     const response = await this.ai.generateInsult(message.content);
+    document.getElementById('typewriter-area')!.classList.add('generating');
     this.creatingResponse = false;
     this.typingMessage = response;
   }
 
   async sendMessage() {
+    document.getElementById('typewriter-area')?.classList.remove('generating');
+
     await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage.trim());
     this.typingMessage = "";
   }
