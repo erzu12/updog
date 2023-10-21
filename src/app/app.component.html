@@ -16,7 +16,8 @@
         <ion-popover trigger="account-button" trigger-action="click">
           <ng-template id="account-popover">
             <ion-item>
-              <ion-toggle [checked]="themeSwitcher.toggle" (ionChange)="themeSwitcher.toggleChange($event)">Dark Mode</ion-toggle>
+              <ion-toggle [checked]="themeSwitcher.toggle" (ionChange)="themeSwitcher.toggleChange($event)">Dark Mode
+              </ion-toggle>
             </ion-item>
             <ion-item>
               <ion-button (click)="signOut()" color="danger">Logout</ion-button>
@@ -24,8 +25,9 @@
           </ng-template>
         </ion-popover>
         <ion-list id="inbox-list">
-          <ion-menu-toggle auto-hide="false" *ngFor="let c of chats; let i = index">
-            <ion-item routerDirection="root" [routerLink]="'/chat/' + c.uid" lines="full" detail="false"
+          <ion-menu-toggle auto-hide="false">
+            <ion-item *ngFor="let c of chats; let i = index" routerDirection="root" [routerLink]="'/chat/' + c.uid"
+                      lines="full" detail="false"
                       routerLinkActive="selected">
               <ion-avatar slot="start">
                 <img alt="Profilepicture" src="{{c.image}}"/>
@@ -34,9 +36,30 @@
                 <ion-label>{{c.displayName}}</ion-label>
               </div>
             </ion-item>
+            <ion-item lines="full" detail="false" id="create-chat-button" [button]="true">
+              <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+              <div class="profile-text">
+                <ion-label>Create Chat</ion-label>
+              </div>
+            </ion-item>
+            <ion-popover trigger="create-chat-button" trigger-action="click">
+              <ng-template id="create-chat-popover">
+                <ion-list>
+                  <ion-item>
+                    <ion-select aria-label="participants" placeholder="Select all participants" multiple="true" [(ngModel)]="participants">
+                      <ion-select-option *ngFor="let u of otherUsers$ | async"
+                                         [value]="u.uid">{{u.displayName}}</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-list>
+                <ion-item>
+                  <ion-button (click)="createChat()" color="primary">Create</ion-button>
+                </ion-item>
+              </ng-template>
+            </ion-popover>
           </ion-menu-toggle>
         </ion-list>
-          <p>Copyright Updog 2023</p>
+        <p>Copyright Updog 2023</p>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>

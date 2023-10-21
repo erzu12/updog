@@ -1,9 +1,9 @@
 import {Component, OnDestroy} from '@angular/core';
 import {ChatReference, FirebaseService, User} from "./firebase.service";
 import {ChatGptRequestService} from './chat-gpt-request.service';
-import {Subscription} from "rxjs";
-import { ThemeSwitcherService } from './theme-switcher.service';
-import { PopoverController } from '@ionic/angular';
+import {Observable, Subscription} from "rxjs";
+import {ThemeSwitcherService} from './theme-switcher.service';
+import {PopoverController} from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +14,16 @@ export class AppComponent implements OnDestroy {
   chats: ChatReference[] = []
   user: User | undefined;
   private subscriptions: Subscription[] = [];
+  otherUsers$: Observable<User[]>;
+  participants: string[] = [];
 
   constructor(
-    private firebase: FirebaseService, 
-    public themeSwitcher: ThemeSwitcherService, 
+    private firebase: FirebaseService,
+    public themeSwitcher: ThemeSwitcherService,
     private popoverController: PopoverController) {
     this.subscriptions.push(firebase.currentUser().subscribe(user => this.user = user));
     this.subscriptions.push(firebase.chats().subscribe(chats => this.chats = chats));
+    this.otherUsers$ = firebase.otherUsers();
   }
 
   async signOut() {
@@ -40,11 +43,10 @@ export class AppComponent implements OnDestroy {
 
     const messsage = 'what is updog?';
 
-    if(await service.isInsult(messsage)) {
+    if (await service.isInsult(messsage)) {
       const response = await service.generateInsult(messsage);
       console.log(response);
-    }
-    else {
+    } else {
       const response = await service.generateAutoResponse(chatHistory, 'Jonas');
       console.log(response);
     }
@@ -52,5 +54,11 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  createChat() {
+    this.firebase.createChat(this.participants).catch(console.error);
+    this.participants = [];
+    this.popoverController.dismiss().catch(console.error);
   }
 }

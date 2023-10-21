@@ -157,13 +157,18 @@ export class FirebaseService implements OnDestroy {
     return this.otherUsersSubject;
   }
 
-  async createChat(participants: string[]) {
-    const id = this.store.createId();
-    await this.chatsCollection.doc(id).set({
-      uid: id,
-      userIds: participants,
-      messages: []
-    });
+  async createChat(otherParticipants: string[]) {
+    let currentUserId = this.userSubject.value?.uid;
+    if (currentUserId) {
+      const id = this.store.createId();
+      await this.chatsCollection.doc(id).set({
+        uid: id,
+        userIds: [currentUserId, ...otherParticipants],
+        messages: []
+      });
+    } else {
+      throw new Error("User not logged in.");
+    }
   }
 
   chats(): BehaviorSubject<ChatReference[]> {
