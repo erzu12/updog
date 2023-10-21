@@ -17,7 +17,6 @@ export class ChatGptRequestService {
   async isInsult(text: string): Promise<boolean> {
     const prompt = 'the following is a text message. is it insulting?\n\n' + text + '\n\nawnser only as either true or false';
     const resp = await this.generateResponse(prompt, 1);
-    console.log(resp.toLowerCase());
     const isInsult = resp.toLowerCase() == 'true';
 
     return isInsult;
@@ -40,7 +39,6 @@ export class ChatGptRequestService {
       prompt += message.user + ': ' + message.message + '\n';
     }
     prompt += '\ngive 3 suggestions for short and casual a responses' + user + 'could write\n\n ' + user +': \n';
-    console.log(prompt);
 
     const response = await this.generateResponse(prompt, 100);
     const responses = response.split('\n');
@@ -51,7 +49,6 @@ export class ChatGptRequestService {
   }
 
   private async generateResponse(text: string, max_tokens: number): Promise<string> {
-    console.log('Generating response');
     const key = environment.gptApiKey;
 
     const openai = new openai_1.OpenAI({
