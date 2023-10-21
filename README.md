@@ -2,7 +2,7 @@
 Tired of using whatsapp? <br>
 Try updog! <br>
 
-## What's updog? <br>
+## What's updog?
 Nothing much, what's up with you? <br>
 
 Updog is a messanger application with integrated AI functionality to detect bullying and to provide a clever answer to it. <br>
