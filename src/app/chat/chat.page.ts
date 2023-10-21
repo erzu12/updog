@@ -1,8 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ChatGptRequestService } from '../chat-gpt-request.service';
-import { Chat, FirebaseService, User } from '../firebase.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import {Component, inject, ViewChild} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ChatGptRequestService} from '../chat-gpt-request.service';
+import {Chat, FirebaseService, User} from '../firebase.service';
+import {BehaviorSubject} from 'rxjs';
+import {IonContent} from "@ionic/angular";
 
 @Component({
   selector: 'app-chat',
@@ -15,16 +16,24 @@ export class ChatPage {
   private activatedRoute = inject(ActivatedRoute)
   public currentUser: BehaviorSubject<User | undefined>;
   public participantsDisplayname: string[] = [];
+  @ViewChild('content')
+  container: IonContent | undefined;
 
   constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
     this.currentUser = firebase.currentUser();
-    firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(chat => this.chat.next(chat));
+    firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(chat => {
+      this.chat.next(chat);
+      setTimeout(() => {
+        this.container?.scrollToBottom();
+      });
+    });
     this.chat.subscribe(chat => {
-      chat?.users.filter(user => user.uid != this.currentUser.value?.uid).map(user => this.participantsDisplayname.push(user.displayName!));
+      this.participantsDisplayname = chat?.users.filter(user => user.uid != this.currentUser.value?.uid).map(user => user.displayName) ?? [];
     });
   }
 
   async sendMessage() {
     await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage);
+    this.typingMessage = "";
   }
 }

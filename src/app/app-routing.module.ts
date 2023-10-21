@@ -1,13 +1,13 @@
-import {NgModule} from '@angular/core';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
-import {AngularFireAuthGuard} from "@angular/fire/compat/auth-guard";
-import {redirectUnauthorizedTo} from "@angular/fire/auth-guard";
+import { NgModule } from '@angular/core';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AngularFireAuthGuard } from "@angular/fire/compat/auth-guard";
+import { redirectUnauthorizedTo } from "@angular/fire/auth-guard";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/login']);
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'chat/1',
+    redirectTo: 'welcome',
     pathMatch: 'full'
   },
   {
@@ -17,9 +17,13 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+  },
+  {
+    path: 'welcome',
+    loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomePageModule),
+    canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }
   }
-
 ];
 
 @NgModule({
@@ -28,4 +32,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
