@@ -20,6 +20,7 @@ This project was created during the [HackStair 2023](https://hack.stair.ch/) hac
 5. Get a clever answer from our AI by clicking on the offensive message marked in red
 6. ???
 7. Profit
+8. (Optional) You can also generate a normal response by clicking on the message marked in white
 
 ## Technologies used
 - [Firebase](https://firebase.google.com/)
