@@ -31,9 +31,9 @@ export class ChatPage implements OnDestroy {
   constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
     this.currentUser = firebase.currentUser();
     this.subscriptions.push(firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(async chat => {
-      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: true })) };
+      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: false })) };
       if (this.chat?.value?.messages) {
-        // newChat = await this.scanMessage(newChat);
+        newChat = await this.scanMessage(newChat);
       }
       this.chat.next(newChat);
       setTimeout(() => {
