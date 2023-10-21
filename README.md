@@ -17,7 +17,7 @@ This project was created during the [HackStair 2023](https://hack.stair.ch/) hac
 2. Login with your Google account or create a new account
 3. Start chatting with your friends
 4. Get insulted by your friends
-5. Get a clever answer from our AI
+5. Get a clever answer from our AI by clicking on the offensive message marked in red
 6. ???
 7. Profit
 
