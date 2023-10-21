@@ -1,8 +1,8 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChatGptRequestService } from '../chat-gpt-request.service';
 import { Chat, FirebaseService, Message, User } from '../firebase.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { IonContent } from "@ionic/angular";
 
 type ChatDisplay = Chat & {
@@ -16,9 +16,7 @@ type MessageWithInsult = Message & { isInsult: boolean };
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-
-
-export class ChatPage {
+export class ChatPage implements OnDestroy {
   public chat: BehaviorSubject<ChatDisplay | undefined> = new BehaviorSubject<ChatDisplay | undefined>(undefined);
   public typingMessage = '';
   public creatingResponse = false;
@@ -27,22 +25,23 @@ export class ChatPage {
   public participantsDisplayname: string[] = [];
   @ViewChild('content')
   container: IonContent | undefined;
+  private subscriptions: Subscription[] = [];
 
   constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
     this.currentUser = firebase.currentUser();
-    firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(async chat => {
-      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: true })) };
+    this.subscriptions.push(firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(async chat => {
+      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: false })) };
       if (this.chat?.value?.messages) {
-        // newChat = await this.scanMessage(newChat);
+        newChat = await this.scanMessage(newChat);
       }
       this.chat.next(newChat);
       setTimeout(() => {
         this.container?.scrollToBottom();
-      });
-    });
-    this.chat.subscribe(chat => {
+      }, 200);
+    }));
+    this.subscriptions.push(this.chat.subscribe(chat => {
       this.participantsDisplayname = chat?.users.filter(user => user.uid != this.currentUser.value?.uid).map(user => user.displayName) ?? [];
-    });
+    }));
   }
 
   async scanMessage(newChat: ChatDisplay): Promise<ChatDisplay> {
@@ -74,5 +73,9 @@ export class ChatPage {
 
     await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage.trim());
     this.typingMessage = "";
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
