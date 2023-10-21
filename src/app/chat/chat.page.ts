@@ -25,7 +25,7 @@ export class ChatPage {
       this.chat.next(chat);
       setTimeout(() => {
         this.container?.scrollToBottom();
-      });
+      }, 200);
     });
     this.chat.subscribe(chat => {
       this.participantsDisplayname = chat?.users.filter(user => user.uid != this.currentUser.value?.uid).map(user => user.displayName) ?? [];
