@@ -66,7 +66,7 @@ export class ChatPage {
   }
 
   async sendMessage() {
-    await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage);
+    await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage.trim());
     this.typingMessage = "";
   }
 }
