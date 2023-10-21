@@ -1,10 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { GoogleAuthProvider, UserInfo } from "@angular/fire/auth";
-import { Router } from "@angular/router";
-import { BehaviorSubject, map, Observable, Subscription } from "rxjs";
-import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
-import { arrayUnion } from "@angular/fire/firestore";
+import {Injectable, OnDestroy} from '@angular/core';
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {GoogleAuthProvider, UserInfo} from "@angular/fire/auth";
+import {Router} from "@angular/router";
+import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
+import {arrayUnion} from "@angular/fire/firestore";
 import * as moment from 'moment';
 
 export interface User {
@@ -12,12 +12,14 @@ export interface User {
   displayName: string;
   email: string;
   photoURL: string;
+  chatReadAmountOfMessages?: Record<string, number>;
 }
 
 export interface ChatReference {
   uid: string;
   displayName: string;
   image: string;
+  numberOfUnreadMessages: number;
 }
 
 interface ChatData {
@@ -99,8 +101,10 @@ export class FirebaseService implements OnDestroy {
       displayName: loggedInUser.displayName ?? loggedInUser.email ?? loggedInUser.uid,
       photoURL: loggedInUser.photoURL ?? "https://www.w3schools.com/howto/img_avatar.png"
     };
-    this.userSubject.next(userData);
-    this.usersCollection.doc(userData.uid).set(userData).catch(console.error);
+    this.userSubject.next(this.allUsersSubject.value.get(userData.uid));
+    this.usersCollection.doc(userData.uid).set(userData, {
+      merge: true
+    }).catch(console.error);
     return userData;
   }
 
@@ -114,10 +118,15 @@ export class FirebaseService implements OnDestroy {
         if (otherUsers.length === 1) {
           image = this.allUsersSubject.value.get(otherUsers[0])?.photoURL ?? image;
         }
+        let numberOfUnreadMessages = chat.messages.length;
+        if (this.userSubject.value?.chatReadAmountOfMessages != undefined && chat.uid in this.userSubject.value?.chatReadAmountOfMessages) {
+          numberOfUnreadMessages = chat.messages.length - this.userSubject.value?.chatReadAmountOfMessages[chat.uid];
+        }
         return {
           uid: chat.uid,
           image: image,
-          displayName: otherUsers.map(userId => this.allUsersSubject.value.get(userId)?.displayName).join(", ")
+          displayName: otherUsers.map(userId => this.allUsersSubject.value.get(userId)?.displayName).join(", "),
+          numberOfUnreadMessages: numberOfUnreadMessages
         };
       }))
     });
@@ -157,7 +166,7 @@ export class FirebaseService implements OnDestroy {
   }
 
   async createChat(otherParticipants: string[]) {
-    let currentUserId = this.userSubject.value?.uid;
+    const currentUserId = this.userSubject.value?.uid;
     if (currentUserId) {
       const id = this.store.createId();
       await this.chatsCollection.doc(id).set({
@@ -177,6 +186,7 @@ export class FirebaseService implements OnDestroy {
   getChat(chatId: string): Observable<Chat> {
     return this.chatsCollection.doc(chatId).valueChanges().pipe(map(chatData => {
       if (chatData) {
+        this.updateReadMessages(chatData);
         return {
           ...chatData,
           users: chatData.userIds.map(userId => this.getUser(userId)),
@@ -190,6 +200,21 @@ export class FirebaseService implements OnDestroy {
       }
       throw new Error('Invalid chatId.');
     }));
+  }
+
+  private updateReadMessages(chatData: ChatData) {
+    const currentUser = this.userSubject.value;
+    if (currentUser) {
+      if (currentUser.chatReadAmountOfMessages == undefined) {
+        currentUser.chatReadAmountOfMessages = {};
+      }
+      currentUser.chatReadAmountOfMessages[chatData.uid] = chatData.messages.length;
+      this.usersCollection.doc(currentUser.uid).update({chatReadAmountOfMessages: currentUser.chatReadAmountOfMessages}).catch(console.error);
+      const chats = this.chatsSubject.value;
+      const chatIndex = chats.findIndex(chat => chat.uid == chatData.uid);
+      chats[chatIndex].numberOfUnreadMessages = 0;
+      this.chatsSubject.next(chats);
+    }
   }
 
   private getUser(userId: string) {
