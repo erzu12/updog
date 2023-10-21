@@ -2,6 +2,8 @@ import {Component, OnDestroy} from '@angular/core';
 import {FirebaseService} from "./firebase.service";
 import {Subscription} from "rxjs";
 import {UserInfo} from "@angular/fire/auth";
+import { ThemeSwitcherService } from './theme-switcher.service';
+import { PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -21,12 +23,13 @@ export class AppComponent implements OnDestroy{
   private subscription: Subscription;
   user: UserInfo | undefined;
 
-  constructor(private firebase: FirebaseService) {
+  constructor(private firebase: FirebaseService, public themeSwitcher: ThemeSwitcherService, private popoverController: PopoverController) {
     this.subscription = firebase.currentUser().subscribe(user => this.user = user);
   }
 
   async signOut() {
     await this.firebase.signOut();
+    this.popoverController.dismiss();
   }
 
   ngOnDestroy(): void {

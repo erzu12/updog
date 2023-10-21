@@ -1,6 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Login</ion-title>
+    <ion-toggle [checked]="themeSwitcher.toggle" (ionChange)="themeSwitcher.toggleChange($event)" slot="end" class="ion-margin-end">Dark Mode</ion-toggle>
   </ion-toolbar>
 </ion-header>
 
