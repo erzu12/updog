@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {GoogleAuthProvider} from "@angular/fire/auth";
+import {GoogleAuthProvider, UserInfo} from "@angular/fire/auth";
 import {Router} from "@angular/router";
 import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
@@ -20,13 +20,13 @@ export interface ChatReference {
   image: string;
 }
 
-export interface ChatData {
+interface ChatData {
   uid: string;
   userIds: string[];
   messages: MessageData[];
 }
 
-export interface MessageData {
+interface MessageData {
   senderId: string;
   content: string;
   timestamp: string;
@@ -46,10 +46,12 @@ export interface Message extends MessageData {
 })
 export class FirebaseService implements OnDestroy {
   private userSubject = new BehaviorSubject<User | undefined>(undefined);
-  private authStateSubscription: Subscription;
+  private authStateSubscription: Subscription | undefined;
   private allUsersSubject = new BehaviorSubject<Map<string, User>>(new Map());
-  private allUsersSubscription: Subscription;
+  private allUsersSubscription: Subscription | undefined;
   private otherUsersSubject = new BehaviorSubject<User[]>([]);
+  private chatsSubject = new BehaviorSubject<ChatReference[]>([]);
+  private chatsSubscription: (() => void) | undefined;
 
   private usersCollection: AngularFirestoreCollection<User>;
   private chatsCollection: AngularFirestoreCollection<ChatData>;
@@ -57,28 +59,68 @@ export class FirebaseService implements OnDestroy {
   constructor(private auth: AngularFireAuth, private router: Router, private store: AngularFirestore) {
     this.usersCollection = this.store.collection('users');
     this.chatsCollection = this.store.collection('chats');
-    this.allUsersSubscription = this.usersCollection.valueChanges().subscribe(users => {
-      this.allUsersSubject.next(users.reduce((accumulator, user) => {
-          return accumulator.set(user.uid, user);
-        }, new Map())
-      );
-      this.emitOtherUsers();
+    this.initAllUsers().then(() => {
+      this.authStateSubscription = this.auth.authState.subscribe(loggedInUser => {
+        if (loggedInUser) {
+          const userData = this.updateUser(loggedInUser);
+          this.emitOtherUsers();
+          this.chatsSubscription?.();
+          this.chatsSubscription = this.loadChats(userData);
+        } else {
+          this.userSubject.next(undefined);
+          this.otherUsersSubject.next([]);
+          this.chatsSubscription?.();
+          this.chatsSubject.next([]);
+        }
+      });
     });
-    this.authStateSubscription = this.auth.authState.subscribe(loggedInUser => {
-      if (loggedInUser) {
-        const userData: User = {
-          uid: loggedInUser.uid,
-          email: loggedInUser.email ?? loggedInUser.uid,
-          displayName: loggedInUser.displayName ?? loggedInUser.email ?? loggedInUser.uid,
-          photoURL: loggedInUser.photoURL ?? "https://www.w3schools.com/howto/img_avatar.png"
-        };
-        this.userSubject.next(userData);
+  }
+
+  private initAllUsers() {
+    return new Promise<void>(resolve => {
+      let isResolved = false;
+      this.allUsersSubscription = this.usersCollection.valueChanges().subscribe(users => {
+        this.allUsersSubject.next(users.reduce((accumulator, user) => {
+            return accumulator.set(user.uid, user);
+          }, new Map())
+        );
         this.emitOtherUsers();
-        this.usersCollection.doc(userData.uid).set(userData).catch(console.error);
-      } else {
-        this.userSubject.next(undefined);
-        this.otherUsersSubject.next([]);
-      }
+        if (!isResolved) {
+          isResolved = true;
+          resolve();
+        }
+      });
+    });
+  }
+
+  private updateUser(loggedInUser: UserInfo) {
+    const userData: User = {
+      uid: loggedInUser.uid,
+      email: loggedInUser.email ?? loggedInUser.uid,
+      displayName: loggedInUser.displayName ?? loggedInUser.email ?? loggedInUser.uid,
+      photoURL: loggedInUser.photoURL ?? "https://www.w3schools.com/howto/img_avatar.png"
+    };
+    this.userSubject.next(userData);
+    this.usersCollection.doc(userData.uid).set(userData).catch(console.error);
+    return userData;
+  }
+
+
+  private loadChats(userData: User) {
+    return this.chatsCollection.ref.where('userIds', "array-contains", userData.uid).onSnapshot(snapshot => {
+      this.chatsSubject.next(snapshot.docs.map(doc => {
+        const chat = doc.data();
+        const otherUsers = chat.userIds.filter(userId => userId !== userData.uid);
+        let image = "assets/group_avatar.png";
+        if (otherUsers.length === 1) {
+          image = this.allUsersSubject.value.get(otherUsers[0])?.photoURL ?? image;
+        }
+        return {
+          uid: chat.uid,
+          image: image,
+          displayName: otherUsers.map(userId => this.allUsersSubject.value.get(userId)?.displayName).join(", ")
+        };
+      }))
     });
   }
 
@@ -92,8 +134,9 @@ export class FirebaseService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.allUsersSubscription.unsubscribe();
-    this.authStateSubscription.unsubscribe();
+    this.allUsersSubscription?.unsubscribe();
+    this.authStateSubscription?.unsubscribe();
+    this.chatsSubscription?.();
   }
 
   async signInWithGoogle() {
@@ -114,23 +157,24 @@ export class FirebaseService implements OnDestroy {
     return this.otherUsersSubject;
   }
 
-  chats(): Observable<ChatReference[]> {
-    return this.otherUsersSubject.pipe(map(users =>
-      users.map(user => {
-        return {
-          uid: [user.uid, this.userSubject.value?.uid].sort().join(":"),
-          displayName: user.displayName,
-          image: user.photoURL
-        };
-      })));
+  async createChat(participants: string[]) {
+    const id = this.store.createId();
+    await this.chatsCollection.doc(id).set({
+      uid: id,
+      userIds: participants,
+      messages: []
+    });
+  }
+
+  chats(): BehaviorSubject<ChatReference[]> {
+    return this.chatsSubject;
   }
 
   getChat(chatId: string): Observable<Chat> {
     return this.chatsCollection.doc(chatId).valueChanges().pipe(map(chatData => {
       if (chatData) {
         return {
-          uid: chatData.uid,
-          userIds: chatData.userIds,
+          ...chatData,
           users: chatData.userIds.map(userId => this.getUser(userId)),
           messages: chatData.messages.map(message => {
             return {
@@ -155,14 +199,15 @@ export class FirebaseService implements OnDestroy {
   async sendMessage(chatId: string, content: string) {
     const senderId = this.userSubject.value?.uid;
     if (senderId) {
-      await this.chatsCollection.doc(chatId).set({
+      return await this.chatsCollection.doc(chatId).update({
         messages: arrayUnion({
           senderId: senderId,
           content: content,
           timestamp: moment().toISOString()
-        }) as unknown as MessageData[], uid: chatId, userIds: chatId.split(':')
+        }) as unknown as MessageData[]
       });
     }
     throw new Error('User not logged in.');
   }
 }
+

@@ -15,7 +15,7 @@
   </ion-header>
 
   <div id="container">
-    <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage"> 
+    <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage">
         <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : 'received'}}">{{m.content}}
           <br>
           <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
@@ -24,9 +24,9 @@
 
     <div id="message-input">
       <ion-textarea [(ngModel)]="typingMessage" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
-      <ion-button color="light" shape="round" (click)="sendMessage" [disabled]="typingMessage === ''">
+      <ion-button color="light" shape="round" (click)="sendMessage()" [disabled]="typingMessage === ''">
         <ion-icon name="send-outline" slot="end" ></ion-icon>
-      </ion-button>  
+      </ion-button>
     </div>
   </div>
 </ion-content>
