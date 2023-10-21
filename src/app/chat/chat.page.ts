@@ -80,12 +80,12 @@ export class ChatPage implements OnDestroy {
       role: 'destructive',
       handler: async () => {
         this.isActionSheetOpen = false;
-        await this.type(this.removeQuotes(response))
+        await this.type(this.prepareTextForTyping(response))
       },
     }));
   }
 
-  removeQuotes(inputString: string): string {
+  prepareTextForTyping(inputString: string): string {
     // Check if the string has at least two characters and starts and ends with double quotes
     if (inputString.length >= 2 && inputString.charAt(0) === '"' && inputString.charAt(inputString.length - 1) === '"') {
       // Use substring to remove the first and last characters
