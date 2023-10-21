@@ -16,7 +16,7 @@
   <div id="background">
     <div id="container">
       <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage">
-        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : m.isInsult ? 'received insult' : 'received'}}"  (click)="createResponse(m)">{{m.content}}
+        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : m.isInsult ? 'received insult' : 'received'}}"  (click)="createResponse(m, $event)">{{m.content}}
           <br>
           <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
         </p>

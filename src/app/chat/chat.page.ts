@@ -57,12 +57,13 @@ export class ChatPage implements OnDestroy {
     return newChat;
   }
 
-  async createResponse(message: MessageWithInsult) {
+  async createResponse(message: MessageWithInsult, element: any) {
     if (!message.isInsult) {
       return;
     }
 
     this.creatingResponse = true;
+    element.target.classList.remove('insult');
     const response = await this.ai.generateInsult(message.content);
     this.creatingResponse = false;
     await this.type(response);
