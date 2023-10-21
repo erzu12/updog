@@ -18,13 +18,13 @@ export class ChatPage {
 
   constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
     this.currentUser = firebase.currentUser();
-    this.chat = firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!);
+    firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(chat => this.chat.next(chat));
     this.chat.subscribe(chat => {
       chat?.users.filter(user => user.uid != this.currentUser.value?.uid).map(user => this.participantsDisplayname.push(user.displayName!));
     });
   }
 
   async sendMessage() {
-    await this.firebase.sendMessage(this.chat.value!.id, this.typingMessage);
+    await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage);
   }
 }

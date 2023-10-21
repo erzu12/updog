@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 import * as openai_1 from 'openai';
 
+type ChatMessage = {
+  user: string,
+  message: string,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,10 +28,31 @@ export class ChatGptRequestService {
     return await this.generateResponse(prompt, 100);
   }
 
-  async generateResponse(text: string, max_tokens: number): Promise<string> {
+  async generateAutoResponse(chatHistory: ChatMessage[], user: string): Promise<string[]> {
+    let users: string[] = [user];
+    for(const message of chatHistory) {
+      if(!users.includes(message.user)) {
+        users.push(message.user);
+      }
+    }
+    let prompt = 'the following is a chat history between ' + users.length + ' people, i am ' + user + ':\n\n';
+    for (const message of chatHistory) {
+      prompt += message.user + ': ' + message.message + '\n';
+    }
+    prompt += '\ngive 3 suggestions for short and casual a responses' + user + 'could write\n\n ' + user +': \n';
+    console.log(prompt);
+
+    const response = await this.generateResponse(prompt, 100);
+    const responses = response.split('\n');
+    for (let i = 0; i < responses.length; i++) {
+      responses[i] = responses[i].substring(3);
+    }
+    return responses;
+  }
+
+  private async generateResponse(text: string, max_tokens: number): Promise<string> {
     console.log('Generating response');
     const key = environment.gptApiKey;
-    console.log(key);
 
     const openai = new openai_1.OpenAI({
       apiKey: key,
