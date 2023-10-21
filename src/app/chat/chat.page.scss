@@ -154,6 +154,11 @@ h2 {
     padding-bottom: 1.5rem;
 }
 
+#container {
+  background-color: var(--ion-color-step-100);
+  padding-bottom: 80px;
+}
+
 @media screen and (max-width: 800px) {
     body {
         margin: 0 0.5rem;
@@ -173,12 +178,14 @@ h2 {
     .imessage p {
         margin: 0.5rem 0;
     }
+
+    #container {
+      padding-bottom: 60px;
+    }
 }
 
-#container {
-    background-color: var(--ion-color-step-100);
-    padding-bottom: 60px;
-}
+
+
 
 #background {
     background-color: var(--ion-color-step-100);
