@@ -24,11 +24,9 @@
     </div>
   </div>
   <div id="message-input">
-    <span id="typewriter-area" >
-      <ion-textarea *ngIf="!creatingResponse" [(ngModel)]="typingMessage" (keydown.control.enter)="sendMessage()" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
-      <ion-skeleton-text *ngIf="creatingResponse"  [animated]="true"></ion-skeleton-text>
-    </span>
-    <ion-button color="light" shape="round" (click)="sendMessage()" [disabled]="typingMessage === ''"  slot="end">
+    <ion-textarea *ngIf="!creatingResponse" [(ngModel)]="typingMessage" (keydown.control.enter)="sendMessage()" placeholder="Type your message here..." auto-grow="true"></ion-textarea>
+    <ion-skeleton-text *ngIf="creatingResponse"  [animated]="true"></ion-skeleton-text>
+    <ion-button color="light" shape="round" (click)="sendMessage()" [disabled]="typingMessage === '' || typingInProgress"  slot="end">
       <ion-icon name="send-outline" slot="end"></ion-icon>
     </ion-button>
   </div>

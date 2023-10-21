@@ -20,6 +20,7 @@ export class ChatPage implements OnDestroy {
   public chat: BehaviorSubject<ChatDisplay | undefined> = new BehaviorSubject<ChatDisplay | undefined>(undefined);
   public typingMessage = '';
   public creatingResponse = false;
+  public typingInProgress = false;
   private activatedRoute = inject(ActivatedRoute)
   public currentUser: BehaviorSubject<User | undefined>;
   public participantsDisplayname: string[] = [];
@@ -30,9 +31,9 @@ export class ChatPage implements OnDestroy {
   constructor(private firebase: FirebaseService, private ai: ChatGptRequestService) {
     this.currentUser = firebase.currentUser();
     this.subscriptions.push(firebase.getChat(this.activatedRoute.snapshot.paramMap.get('id')!).subscribe(async chat => {
-      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: false })) };
+      let newChat: ChatDisplay = { ...chat, messages: chat.messages.map<MessageWithInsult>(message => ({ ...message, isInsult: true })) };
       if (this.chat?.value?.messages) {
-        newChat = await this.scanMessage(newChat);
+        // newChat = await this.scanMessage(newChat);
       }
       this.chat.next(newChat);
       setTimeout(() => {
@@ -63,19 +64,28 @@ export class ChatPage implements OnDestroy {
 
     this.creatingResponse = true;
     const response = await this.ai.generateInsult(message.content);
-    document.getElementById('typewriter-area')!.classList.add('generating');
     this.creatingResponse = false;
-    this.typingMessage = response;
+    await this.type(response);
   }
 
   async sendMessage() {
-    document.getElementById('typewriter-area')?.classList.remove('generating');
-
     await this.firebase.sendMessage(this.chat.value!.uid, this.typingMessage.trim());
     this.typingMessage = "";
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  private async type(text: string) {
+    this.typingInProgress = true;
+    const charArray = text.split('');
+    const maxDelay = 30;
+    const minDelay = 2;
+    for (let char of charArray) {
+      this.typingMessage += char;
+      await new Promise(resolve => setTimeout(resolve, Math.random() * (maxDelay - minDelay) + minDelay));
+    }
+    this.typingInProgress = false;
   }
 }
