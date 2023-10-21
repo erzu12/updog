@@ -16,7 +16,7 @@
         </ion-card>
         <ion-popover trigger="account-button" trigger-action="click">
           <ng-template id="account-popover">
-            <ion-item>
+            <ion-item lines="none">
               <ion-toggle [checked]="themeSwitcher.toggle" (ionChange)="themeSwitcher.toggleChange($event)">Dark Mode
               </ion-toggle>
             </ion-item>
