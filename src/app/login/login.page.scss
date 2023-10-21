@@ -1,5 +1,6 @@
 ion-card {
     width: fit-content;
+    min-width: 384px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -12,10 +13,19 @@ ion-card {
     width: 100% !important;
     height: 100% !important;
     max-width: 200px !important; //any size
-    max-height: w00px !important; //any size 
     border-radius: 50%;
 }
 
 ion-card img {
     cursor: pointer;
+}
+
+ion-item {
+  min-width: 352px;
+}
+
+ion-input.styled-input {
+  margin: 7px 0;
+  --padding-start: 7px !important;
+  --padding-end: 7px !important;
 }
