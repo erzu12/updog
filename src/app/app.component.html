@@ -24,6 +24,25 @@
           </ng-template>
         </ion-popover>
         <ion-list id="inbox-list">
+            <ion-item lines="full" [button]="true" id="add-chat-button">
+              <ion-icon name="add" slot="start"></ion-icon>
+              <ion-label>Add Chat</ion-label>
+            </ion-item>
+            <ion-popover trigger="add-chat-button" trigger-action="click" [dismissOnSelect]="true">
+              <ng-template id="add-chat-popover">
+                <ion-menu-toggle auto-hide="false" *ngFor="let c of chats; let i = index">
+                <ion-item routerDirection="root" [routerLink]="'/chat/' + c.uid" lines="full" detail="false"
+                  routerLinkActive="selected">
+                  <ion-avatar slot="start">
+                    <img alt="Profilepicture" src="{{c.image}}"/>
+                  </ion-avatar>
+                  <div class="profile-text">
+                    <ion-label>{{c.displayName}}</ion-label>
+                  </div>
+                </ion-item>
+              </ion-menu-toggle>
+              </ng-template>
+            </ion-popover>
           <ion-menu-toggle auto-hide="false" *ngFor="let c of chats; let i = index">
             <ion-item routerDirection="root" [routerLink]="'/chat/' + c.uid" lines="full" detail="false"
                       routerLinkActive="selected">
