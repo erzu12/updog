@@ -17,6 +17,9 @@
     position: relative;
     word-wrap: break-word;
     white-space: pre-wrap;
+    &.group.received {
+        padding: 0.1rem .875rem 0.25rem;
+    }
 }
 
 p.sent {
@@ -252,4 +255,14 @@ ion-skeleton-text {
     #message-input {
         padding-left: 20px;
     }
+}
+
+ion-note {
+    margin-left: 0.25rem;
+}
+
+.user {
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: bold;
 }

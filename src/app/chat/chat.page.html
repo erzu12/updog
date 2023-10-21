@@ -14,9 +14,14 @@
     </ion-toolbar>
   </ion-header>
   <div id="background">
-    <div id="container">
-      <div *ngFor="let m of (chat | async)?.messages; let i = index" class="imessage">
-        <p class="{{m.senderId === (currentUser | async)?.uid ? 'sent' : m.isInsult ? 'received insult' : 'received'}}"  (click)="createResponse(m, $event)">{{m.content}}
+    <div id="container" *ngIf="chat | async; let chat">
+      <div *ngFor="let m of chat.messages; let i = index" class="imessage">
+        <p class="{{(m.senderId === (currentUser | async)?.uid ? 'sent' : m.isInsult ? 'received insult' : 'received') + (chat.users.length > 2 ? ' group' : '')}}"  (click)="createResponse(m, $event)">
+          <span *ngIf="chat.users.length > 2 && m.senderId !== (currentUser | async)?.uid">
+            <ion-note class="user">{{m.sender.displayName}}</ion-note>
+            <br>
+          </span>
+          {{m.content}}
           <br>
           <ion-note class="time">{{m.timestamp | date: 'HH:mm'}}</ion-note>
         </p>
