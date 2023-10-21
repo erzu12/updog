@@ -1,8 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
-import {FirebaseService} from "./firebase.service";
+import {FirebaseService, User} from "./firebase.service";
 import { ChatGptRequestService } from './chat-gpt-request.service';
 import {Subscription} from "rxjs";
-import {UserInfo} from "@angular/fire/auth";
 
 @Component({
   selector: 'app-root',
@@ -20,7 +19,7 @@ export class AppComponent implements OnDestroy{
   ]
 
   private subscription: Subscription;
-  user: UserInfo | undefined;
+  user: User | undefined;
 
   constructor(private firebase: FirebaseService) {
     this.subscription = firebase.currentUser().subscribe(user => this.user = user);
